@@ -1,21 +1,23 @@
 #include "graphicsview.h"
 
-GraphicsView::GraphicsView()
-{
-//    scene = new QGraphicsScene();
-//    this->setScene(scene);
-//    group_ranges = new QGraphicsItemGroup();
-    //    scene->addItem(group_ranges);
-}
-
 void GraphicsView::addPoint(QPointF point)
 {
     points.push_back(point);
+
+    auto abs_x = qAbs(point.x());
+    auto abs_y = qAbs(point.y());
+
+    if(abs_x > max_x)
+        max_x = abs_x + 10000;
+    if(abs_y > max_y)
+        max_y = abs_y + 2500;
 }
 
 void GraphicsView::clear()
 {
     points.clear();
+    max_x = 1;
+    max_y = 1;
 }
 
 void GraphicsView::paintEvent(QPaintEvent *event)
@@ -28,7 +30,7 @@ void GraphicsView::paintEvent(QPaintEvent *event)
 void GraphicsView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
-//    QGraphicsView::resizeEvent(event);
+//    QObject::resizeEvent(event);
 }
 
 void GraphicsView::testDraw(QPainter *qp)
@@ -52,13 +54,20 @@ void GraphicsView::testDraw(QPainter *qp)
     auto tempPts = points;
     for(auto&& pt : tempPts)
     {
-        pt.setX( pt.x() / 100000 * width);
-        pt.setY( pt.y() + height/2);
+        pt.setX( pt.x() / max_x * width);
+        pt.setY( pt.y() / max_y * height / 2 + height / 2);
+//        pt.setY( pt.y() / max_y * height + height/2);
     }
 //    qDebug() << tempPts;
 
     qp->drawLines(tempPts);
 
+    if(!tempPts.isEmpty())
+    {
+        pen.setColor(Qt::black);
+        qp->setPen(pen);
+        qp->drawText(tempPts.at(0), "Target");
+    }
     // test paint
 //    QPen penRed(Qt::red, 4);
 

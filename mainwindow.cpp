@@ -21,13 +21,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pB_start_clicked()
 {
+    graphicsView->clear();
+
     QPointF pos  {ui->dSpB_distance->value(), 0};
     QPointF velo {- ui->dSpB_targetSpeed->value(), 0};
     double dT = 0.1;
-    auto target = Target(pos, velo, dT);
-    for (int var = 0; var < 1000; ++var) {
-        target.move();
-        graphicsView->addPoint(target.getPos());
+    auto target = new Target(pos, velo, dT);
+    for (int var = 0; var < 1500; ++var)
+    {
+        target->move();
+        auto pos = target->getPos();
+        pos.setY(pos.y()*-1);
+
+        graphicsView->addPoint(pos);
     }
+
+    graphicsView->repaint();
 }
 

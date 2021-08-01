@@ -10,7 +10,7 @@ class GraphicsView : public QWidget
 {
     Q_OBJECT
 public:
-    GraphicsView();
+    GraphicsView() {}
 
     void addPoint(QPointF point);
     void clear();
@@ -25,6 +25,9 @@ private:
     void testDraw(QPainter *qp);
 
     QVector<QPointF> points;
+
+    double max_x = 1;
+    double max_y = 1;
 };
 
 #endif // GRAPHICSVIEW_H

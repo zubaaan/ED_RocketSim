@@ -4,8 +4,37 @@
 QPointF LinAl::vectNorm(QPointF vect)
 {
     QPointF nVect;
-    nVect.setY(1.);
-    nVect.setX( - (vect.y() * nVect.y()) / vect.x() );
+
+    if(vect.x() > 0 && vect.y() > 0)
+    {
+        nVect.setY(-1.);
+        nVect.setX( - (vect.y() * nVect.y()) / vect.x() );
+    }
+    else if(vect.x() < 0 && vect.y() > 0)
+    {
+        nVect.setX(1.);
+        nVect.setY( - (vect.x() * nVect.x()) / vect.y() );
+    }
+    else if(vect.x() < 0 && vect.y() < 0)
+    {
+        nVect.setY(1.);
+        nVect.setX( - (vect.y() * nVect.y()) / vect.x() );
+    }
+    else if(vect.x() > 0 && vect.y() < 0)
+    {
+        nVect.setX(-1.);
+        nVect.setY( - (vect.x() * nVect.x()) / vect.y() );
+    }
+    else if(vect.x() == 0)
+    {
+        nVect.setX(1.);
+        nVect.setY( - (vect.x() * nVect.x()) / vect.y() );
+    } else if(vect.y() == 0)
+    {
+        nVect.setY(1.);
+        nVect.setX( - (vect.y() * nVect.y()) / vect.x() );
+    }
+
     return nVect;
 }
 

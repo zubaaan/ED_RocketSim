@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include <QPointF>
-#include <QDebug>
+#include "linal.h"
+
 class AirVehicle : public QObject
 {
     Q_OBJECT

@@ -24,7 +24,7 @@
        </size>
       </property>
       <property name="title">
-       <string>Начальные условия</string>
+       <string>Initial conditions</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <property name="leftMargin">
@@ -48,7 +48,7 @@
              <item>
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>Скорость ракеты, [м/с]</string>
+                <string>Missile speed [m/s]</string>
                </property>
               </widget>
              </item>
@@ -72,12 +72,15 @@
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Скорость цели, [м/с]</string>
+                <string>Target speed [m/s]</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QDoubleSpinBox" name="dSpB_targetSpeed">
+               <property name="minimum">
+                <double>0.000000000000000</double>
+               </property>
                <property name="maximum">
                 <double>900.000000000000000</double>
                </property>
@@ -107,7 +110,7 @@
              <item>
               <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>Расстояние, [м]</string>
+                <string>Distance [m]</string>
                </property>
               </widget>
              </item>
@@ -131,7 +134,7 @@
              <item>
               <widget class="QPushButton" name="pB_start">
                <property name="text">
-                <string>Пуск</string>
+                <string>Start</string>
                </property>
               </widget>
              </item>
