@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "Crafts/target.h"
-#include <QThread>
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -17,25 +14,41 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete graphicsView;
 }
 
 void MainWindow::on_pB_start_clicked()
 {
+    ui->pB_start->setEnabled(false);
     graphicsView->clear();
 
-    QPointF pos  {ui->dSpB_distance->value(), 0};
-    QPointF velo {- ui->dSpB_targetSpeed->value(), 0};
-    double dT = 0.1;
-    auto target = new Target(pos, velo, dT);
-    for (int var = 0; var < 1500; ++var)
+    engine = new Engine();
+    engine->init(ui->dSpB_rocketSpeed->value(), ui->dSpB_targetSpeed->value(), ui->dSpB_distance->value(), 0.1);
+    connect(engine, &Engine::paintPointSignal, graphicsView, &GraphicsView::paintPointSlot, Qt::BlockingQueuedConnection);
+
+    thread = new QThread(this);
+    engine->moveToThread(thread);
+
+    connect(thread, &QThread::started, engine, &Engine::process);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    connect(engine, &Engine::finished, [this]()
     {
-        target->move();
-        auto pos = target->getPos();
-        pos.setY(pos.y()*-1);
+        thread->quit();
+        engine->deleteLater();
+        ui->pB_start->setEnabled(true);
+    });
 
-        graphicsView->addPoint(pos);
-    }
+    connect(this, &MainWindow::stopEngine, engine, &Engine::stop, Qt::DirectConnection);
 
-    graphicsView->repaint();
+
+    thread->start();
+}
+
+
+void MainWindow::on_pB_stop_clicked()
+{
+    emit stopEngine();
+    ui->pB_start->setEnabled(true);
 }
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Eagle Dynamics - Rocket Simulation</string>
+   <string>Eagle Dynamics - Guidance Simulation</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -48,7 +48,7 @@
              <item>
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>Missile speed [m/s]</string>
+                <string>Missile speed, [m/s]</string>
                </property>
               </widget>
              </item>
@@ -72,7 +72,7 @@
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Target speed [m/s]</string>
+                <string>Target speed, [m/s]</string>
                </property>
               </widget>
              </item>
@@ -110,7 +110,7 @@
              <item>
               <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>Distance [m]</string>
+                <string>Distance, [m]</string>
                </property>
               </widget>
              </item>
@@ -132,11 +132,22 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <widget class="QPushButton" name="pB_start">
-               <property name="text">
-                <string>Start</string>
-               </property>
-              </widget>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QPushButton" name="pB_start">
+                 <property name="text">
+                  <string>Start</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pB_stop">
+                 <property name="text">
+                  <string>Stop</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </item>

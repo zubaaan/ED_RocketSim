@@ -12,22 +12,22 @@ class GraphicsView : public QWidget
 public:
     GraphicsView() {}
 
-    void addPoint(QPointF point);
     void clear();
 
-private:
-    QGraphicsScene      *scene;
-    QGraphicsItemGroup  *group_ranges;
+public slots:
+    void paintPointSlot(QString name, QPointF pos);
 
+private:
     void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
 
     void testDraw(QPainter *qp);
 
-    QVector<QPointF> points;
+    std::map<QString, QVector<QPointF>> points;
 
     double max_x = 1;
+    double min_x = 1;
     double max_y = 1;
+    double min_y = 1;
 };
 
 #endif // GRAPHICSVIEW_H

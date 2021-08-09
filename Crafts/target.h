@@ -1,22 +1,32 @@
 #ifndef TARGET_H
 #define TARGET_H
 
-#include <airvehicle.h>
+#include "airvehicle.h"
 
 #include <random>
-#include "common.h"
 
 class Target : public AirVehicle
 {
     Q_OBJECT
 public:
-    explicit Target(QPointF pos, QPointF velo, double deltaT, QObject *parent = nullptr);
-    ~Target() {printf("~Target()");}
+    explicit Target(QPointF pos, QPointF velo, double deltaT, QObject *parent = nullptr)
+        : AirVehicle(pos, velo, deltaT, parent)
+    {
+        qDebug() << "Target()";
+        mersenne = std::mt19937(time(nullptr));
+        maneuver_t = t + uid_t(mersenne);
+    }
+
+    ~Target()
+    {
+        qDebug() << "~Target()";
+    }
 
     void move();
-    void maneuver();
 
 private:
+    void maneuver();
+
     double t = 0;           // model T [s]
     double maneuver_t = 0;
     double maneuver_t_dur = 0;

@@ -9,18 +9,21 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Crafts/rocket.cpp \
+    Crafts/Components/solidengine.cpp \
+    Crafts/missile.cpp \
     Crafts/target.cpp \
+    engine.cpp \
     graphicsview.cpp \
     linal.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    Crafts/rocket.h \
+    Crafts/Components/solidengine.h \
+    Crafts/missile.h \
     Crafts/target.h \
-    airvehicle.h \
-    common.h \
+    Crafts/airvehicle.h \
+    engine.h \
     graphicsview.h \
     linal.h \
     mainwindow.h

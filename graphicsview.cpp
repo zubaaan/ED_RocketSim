@@ -1,23 +1,41 @@
 #include "graphicsview.h"
 
-void GraphicsView::addPoint(QPointF point)
-{
-    points.push_back(point);
-
-    auto abs_x = qAbs(point.x());
-    auto abs_y = qAbs(point.y());
-
-    if(abs_x > max_x)
-        max_x = abs_x + 10000;
-    if(abs_y > max_y)
-        max_y = abs_y + 2500;
-}
-
 void GraphicsView::clear()
 {
     points.clear();
     max_x = 1;
     max_y = 1;
+    min_x = 1;
+    min_y = 1;
+}
+
+void GraphicsView::paintPointSlot(QString name, QPointF pos)
+{
+    pos.setY(pos.y() * -1);
+
+    auto iter = points.find(name);
+
+    if(iter != points.end())
+        iter->second.push_back(pos);
+    else
+    {
+        QVector<QPointF> temp;
+        temp.push_back(pos);
+        points.emplace(name, temp);
+    }
+
+//    auto abs_y = qAbs(pos.y());
+
+    if(pos.x() > max_x)
+        max_x = pos.x() + 10000;
+    if(pos.y() > max_y)
+        max_y = pos.y();// + 2500;
+    if(pos.x() < min_x && pos.x() != 0)
+        min_x = pos.x();// + 10000;
+    if(pos.y() < min_y && pos.y() != 0)
+        min_y = pos.y();// + 2500;
+
+    this->repaint();
 }
 
 void GraphicsView::paintEvent(QPaintEvent *event)
@@ -25,12 +43,6 @@ void GraphicsView::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
     QPainter qp(this);
     testDraw(&qp);
-}
-
-void GraphicsView::resizeEvent(QResizeEvent *event)
-{
-    Q_UNUSED(event);
-//    QObject::resizeEvent(event);
 }
 
 void GraphicsView::testDraw(QPainter *qp)
@@ -48,26 +60,35 @@ void GraphicsView::testDraw(QPainter *qp)
     qp->setBrush(QBrush(Qt::white));
     qp->drawRect(0,0,width,height);
 
-    pen.setColor(Qt::blue);
-    qp->setPen(pen);
-
-    auto tempPts = points;
-    for(auto&& pt : tempPts)
+    for(const auto& [key, value] : points)
     {
-        pt.setX( pt.x() / max_x * width);
-        pt.setY( pt.y() / max_y * height / 2 + height / 2);
-//        pt.setY( pt.y() / max_y * height + height/2);
-    }
-//    qDebug() << tempPts;
+        auto tempPts = value;
+        for(auto&& pt : tempPts)
+        {
+            pt.setX( (pt.x() - min_x) / (max_x - min_x) * width);
+            pt.setY( (pt.y() - min_y) / (max_y - min_y) * height / 2 + height / 2);
+        }
 
-    qp->drawLines(tempPts);
-
-    if(!tempPts.isEmpty())
-    {
-        pen.setColor(Qt::black);
+        if(key == "Missile")
+            pen.setColor(Qt::red);
+        else
+            pen.setColor(Qt::blue);
         qp->setPen(pen);
-        qp->drawText(tempPts.at(0), "Target");
+        qp->drawLines(tempPts);
+
+        if(!tempPts.isEmpty())
+        {
+            pen.setColor(Qt::black);
+            qp->setPen(pen);
+            qp->drawText(tempPts.at(0), key);
+        }
     }
+
+
+
+
+
+
     // test paint
 //    QPen penRed(Qt::red, 4);
 
